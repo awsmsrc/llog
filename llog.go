@@ -3,6 +3,7 @@ package llog
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"time"
 )
@@ -27,19 +28,13 @@ var (
 	level int = 1
 )
 
-func coloredLog(color string, s string) {
-	fmt.Fprintf(
-		os.Stdout,
-		"%v[%v] %v\n",
-		color,
-		time.Now().Format("2006-01-02  15:04:05"),
-		s,
-	)
+type Logger struct {
+	io.Writer
 }
 
-func coloredLogF(color string, s string, a ...interface{}) {
+func write(w io.Writer, color string, s string, a ...interface{}) {
 	fmt.Fprintf(
-		os.Stdout,
+		w,
 		"%v[%v] %v\n",
 		color,
 		time.Now().Format("2006-01-02  15:04:05"),
@@ -55,60 +50,106 @@ func SetLevel(i int) error {
 	return nil
 }
 
-func Debug(s string) {
-	if level > LevelDebug || level == LevelNull {
-		return
+func (l *Logger) Debug(s string) {
+	if !(level > LevelDebug || level == LevelNull) {
+		write(l, YELLOW, s)
 	}
-	coloredLog(YELLOW, s)
+}
+
+func (l *Logger) FDebug(s string, a ...interface{}) {
+	if !(level > LevelDebug || level == LevelNull) {
+		write(l, YELLOW, s, a)
+	}
+}
+
+func (l *Logger) Info(s string) {
+	if !(level > LevelInfo || level == LevelNull) {
+		write(l, CYAN, s)
+	}
+}
+
+func (l *Logger) FInfo(s string, a ...interface{}) {
+	if !(level > LevelDebug || level == LevelNull) {
+		write(l, CYAN, s, a)
+	}
+}
+
+func (l *Logger) Warn(s string) {
+	if !(level > LevelWarn || level == LevelNull) {
+		write(l, MAGENTA, s)
+	}
+}
+
+func (l *Logger) FWarn(s string, a ...interface{}) {
+	if !(level > LevelWarn || level == LevelNull) {
+		write(l, MAGENTA, s, a)
+	}
+}
+
+func (l *Logger) Error(s string) {
+	write(l, RED, s)
+}
+
+func (l *Logger) FError(s string, a ...interface{}) {
+	write(l, RED, s, a)
+}
+
+func (l *Logger) Success(s string) {
+	write(l, GREEN, s)
+}
+
+func (l *Logger) FSuccess(s string, a ...interface{}) {
+	write(l, GREEN, s, a)
+}
+
+func Debug(s string) {
+	if !(level > LevelDebug || level == LevelNull) {
+		write(os.Stdout, YELLOW, s)
+	}
 }
 
 func FDebug(s string, a ...interface{}) {
-	if level > LevelDebug || level == LevelNull {
-		return
+	if !(level > LevelDebug || level == LevelNull) {
+		write(os.Stdout, YELLOW, s, a)
 	}
-	coloredLogF(YELLOW, s, a)
 }
 
 func Info(s string) {
-	if level > LevelInfo || level == LevelNull {
-		return
+	if !(level > LevelInfo || level == LevelNull) {
+		write(os.Stdout, CYAN, s)
 	}
-	coloredLog(CYAN, s)
 }
 
 func FInfo(s string, a ...interface{}) {
-	if level > LevelInfo || level == LevelNull {
-		return
+	if !(level > LevelInfo || level == LevelNull) {
+		write(os.Stdout, CYAN, s, a)
 	}
-	coloredLogF(CYAN, s, a)
 }
 
 func Warn(s string) {
-	if level > LevelWarn || level == LevelNull {
-		return
+	if !(level > LevelWarn || level == LevelNull) {
+		write(os.Stdout, MAGENTA, s)
 	}
-	coloredLog(MAGENTA, s)
 }
 
 func FWarn(s string, a ...interface{}) {
-	if level > LevelWarn || level == LevelNull {
-		return
+	if !(level > LevelWarn || level == LevelNull) {
+		write(os.Stdout, MAGENTA, s, a)
 	}
-	coloredLogF(MAGENTA, s, a)
 }
 
 func Error(s string) {
-	coloredLog(RED, s)
+	write(os.Stdout, RED, s)
 }
 
 func FError(s string, a ...interface{}) {
-	coloredLogF(RED, s, a)
+	write(os.Stdout, RED, s, a)
 }
 
 func Success(s string) {
-	coloredLog(GREEN, s)
+	write(os.Stdout, GREEN, s)
 }
 
 func FSuccess(s string, a ...interface{}) {
-	coloredLogF(GREEN, s, a)
+	write(os.Stdout, GREEN, s, a)
 }
