@@ -11,15 +11,15 @@ func main() {
 
 	//simple functions that pipe to Stdout
 	llog.Debug("debug")
-	llog.FDebug("debug %v", "test string")
+	llog.Debugf("debug %v", "test string")
 	llog.Info("info")
-	llog.FInfo("info %v", "test string")
+	llog.Infof("info %v", "test string")
 	llog.Warn("warn")
-	llog.FWarn("warn %v", "test string")
+	llog.Warnf("warn %v", "test string")
 	llog.Error("error")
-	llog.FError("error %v", "test string")
+	llog.Errorf("error %v", "test string")
 	llog.Success("success")
-	llog.FSuccess("success %v", "test string")
+	llog.Successf("success %v", "test string")
 
 	//specify the writer
 	logger := &llog.Logger{ioutil.Discard}

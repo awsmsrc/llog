@@ -14,6 +14,7 @@ const (
 	YELLOW  = "\033[93m"
 	CYAN    = "\033[36m"
 	MAGENTA = "\033[95m"
+	RESET   = "\033[0m"
 )
 
 const (
@@ -32,13 +33,14 @@ type Logger struct {
 	io.Writer
 }
 
-func write(w io.Writer, color string, s string, a ...interface{}) {
+func write(w io.Writer, color string, s interface{}, a ...interface{}) {
 	fmt.Fprintf(
 		w,
-		"%v[%v] %v\n",
+		"%v[%v] %v%v\n",
 		color,
-		time.Now().Format("2006-01-02  15:04:05"),
-		fmt.Sprintf(s, a...),
+		time.Now().Format("2006/01/02-15:04:05"),
+		fmt.Sprintf(fmt.Sprint(s), a...),
+		RESET,
 	)
 }
 
@@ -50,106 +52,116 @@ func SetLevel(i int) error {
 	return nil
 }
 
-func (l *Logger) Debug(s string) {
+func (l *Logger) Debug(s interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
 		write(l, YELLOW, s)
 	}
 }
 
-func (l *Logger) FDebug(s string, a ...interface{}) {
+func (l *Logger) Debugf(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
 		write(l, YELLOW, s, a)
 	}
 }
 
-func (l *Logger) Info(s string) {
+func (l *Logger) Info(s interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
 		write(l, CYAN, s)
 	}
 }
 
-func (l *Logger) FInfo(s string, a ...interface{}) {
+func (l *Logger) Infof(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
 		write(l, CYAN, s, a)
 	}
 }
 
-func (l *Logger) Warn(s string) {
+func (l *Logger) Warn(s interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
 		write(l, MAGENTA, s)
 	}
 }
 
-func (l *Logger) FWarn(s string, a ...interface{}) {
+func (l *Logger) Warnf(s interface{}, a ...interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
 		write(l, MAGENTA, s, a)
 	}
 }
 
-func (l *Logger) Error(s string) {
+func (l *Logger) Error(s interface{}) {
 	write(l, RED, s)
 }
 
-func (l *Logger) FError(s string, a ...interface{}) {
+func (l *Logger) Errorf(s interface{}, a ...interface{}) {
 	write(l, RED, s, a)
 }
 
-func (l *Logger) Success(s string) {
+func (l *Logger) Success(s interface{}) {
 	write(l, GREEN, s)
 }
 
-func (l *Logger) FSuccess(s string, a ...interface{}) {
+func (l *Logger) Successf(s interface{}, a ...interface{}) {
 	write(l, GREEN, s, a)
 }
 
-func Debug(s string) {
+func (l *Logger) FATAL(err error) {
+	write(os.Stdout, RED, err)
+	os.Exit(1)
+}
+
+func Debug(s interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
 		write(os.Stdout, YELLOW, s)
 	}
 }
 
-func FDebug(s string, a ...interface{}) {
+func Debugf(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
 		write(os.Stdout, YELLOW, s, a)
 	}
 }
 
-func Info(s string) {
+func Info(s interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
 		write(os.Stdout, CYAN, s)
 	}
 }
 
-func FInfo(s string, a ...interface{}) {
+func Infof(s interface{}, a ...interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
 		write(os.Stdout, CYAN, s, a)
 	}
 }
 
-func Warn(s string) {
+func Warn(s interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
 		write(os.Stdout, MAGENTA, s)
 	}
 }
 
-func FWarn(s string, a ...interface{}) {
+func Warnf(s interface{}, a ...interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
 		write(os.Stdout, MAGENTA, s, a)
 	}
 }
 
-func Error(s string) {
+func Error(s interface{}) {
 	write(os.Stdout, RED, s)
 }
 
-func FError(s string, a ...interface{}) {
+func Errorf(s interface{}, a ...interface{}) {
 	write(os.Stdout, RED, s, a)
 }
 
-func Success(s string) {
+func FATAL(err error) {
+	write(os.Stdout, RED, err)
+	os.Exit(1)
+}
+
+func Success(s interface{}) {
 	write(os.Stdout, GREEN, s)
 }
 
-func FSuccess(s string, a ...interface{}) {
+func Successf(s interface{}, a ...interface{}) {
 	write(os.Stdout, GREEN, s, a)
 }
