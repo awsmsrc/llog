@@ -33,13 +33,13 @@ type Logger struct {
 	io.Writer
 }
 
-func write(w io.Writer, color string, s interface{}, a ...interface{}) {
+func write(w io.Writer, color string, s string, a ...interface{}) {
 	fmt.Fprintf(
 		w,
 		"%v[%v] %v%v\n",
 		color,
 		time.Now().Format("2006/01/02-15:04:05"),
-		fmt.Sprintf(fmt.Sprint(s), a...),
+		fmt.Sprintf(s, a...),
 		RESET,
 	)
 }
@@ -54,114 +54,114 @@ func SetLevel(i int) error {
 
 func (l *Logger) Debug(s interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
-		write(l, YELLOW, s)
+		write(l, YELLOW, fmt.Sprint(s))
 	}
 }
 
 func (l *Logger) Debugf(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
-		write(l, YELLOW, s, a)
+		write(l, YELLOW, fmt.Sprint(s), a...)
 	}
 }
 
 func (l *Logger) Info(s interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
-		write(l, CYAN, s)
+		write(l, CYAN, fmt.Sprint(s))
 	}
 }
 
 func (l *Logger) Infof(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
-		write(l, CYAN, s, a)
+		write(l, CYAN, fmt.Sprint(s), a...)
 	}
 }
 
 func (l *Logger) Warn(s interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
-		write(l, MAGENTA, s)
+		write(l, MAGENTA, fmt.Sprint(s))
 	}
 }
 
 func (l *Logger) Warnf(s interface{}, a ...interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
-		write(l, MAGENTA, s, a)
+		write(l, MAGENTA, fmt.Sprint(s), a...)
 	}
 }
 
 func (l *Logger) Error(s interface{}) {
-	write(l, RED, s)
+	write(l, RED, fmt.Sprint(s))
 }
 
 func (l *Logger) Errorf(s interface{}, a ...interface{}) {
-	write(l, RED, s, a)
+	write(l, RED, fmt.Sprint(s), a...)
 }
 
 func (l *Logger) Success(s interface{}) {
-	write(l, GREEN, s)
+	write(l, GREEN, fmt.Sprint(s))
 }
 
 func (l *Logger) Successf(s interface{}, a ...interface{}) {
-	write(l, GREEN, s, a)
+	write(l, GREEN, fmt.Sprint(s), a...)
 }
 
-func (l *Logger) FATAL(err error) {
-	write(os.Stdout, RED, err)
+func (l *Logger) FATAL(s interface{}) {
+	write(os.Stdout, RED, fmt.Sprint(s))
 	os.Exit(1)
 }
 
 func Debug(s interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
-		write(os.Stdout, YELLOW, s)
+		write(os.Stdout, YELLOW, fmt.Sprint(s))
 	}
 }
 
 func Debugf(s interface{}, a ...interface{}) {
 	if !(level > LevelDebug || level == LevelNull) {
-		write(os.Stdout, YELLOW, s, a)
+		write(os.Stdout, YELLOW, fmt.Sprint(s), a...)
 	}
 }
 
 func Info(s interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
-		write(os.Stdout, CYAN, s)
+		write(os.Stdout, CYAN, fmt.Sprint(s))
 	}
 }
 
 func Infof(s interface{}, a ...interface{}) {
 	if !(level > LevelInfo || level == LevelNull) {
-		write(os.Stdout, CYAN, s, a)
+		write(os.Stdout, CYAN, fmt.Sprint(s), a...)
 	}
 }
 
 func Warn(s interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
-		write(os.Stdout, MAGENTA, s)
+		write(os.Stdout, MAGENTA, fmt.Sprint(s))
 	}
 }
 
 func Warnf(s interface{}, a ...interface{}) {
 	if !(level > LevelWarn || level == LevelNull) {
-		write(os.Stdout, MAGENTA, s, a)
+		write(os.Stdout, MAGENTA, fmt.Sprint(s), a...)
 	}
 }
 
 func Error(s interface{}) {
-	write(os.Stdout, RED, s)
+	write(os.Stdout, RED, fmt.Sprint(s))
 }
 
 func Errorf(s interface{}, a ...interface{}) {
-	write(os.Stdout, RED, s, a)
+	write(os.Stdout, RED, fmt.Sprint(s), a...)
 }
 
-func FATAL(err error) {
-	write(os.Stdout, RED, err)
+func FATAL(s interface{}) {
+	write(os.Stdout, RED, fmt.Sprint(s))
 	os.Exit(1)
 }
 
 func Success(s interface{}) {
-	write(os.Stdout, GREEN, s)
+	write(os.Stdout, GREEN, fmt.Sprint(s))
 }
 
 func Successf(s interface{}, a ...interface{}) {
-	write(os.Stdout, GREEN, s, a)
+	write(os.Stdout, GREEN, fmt.Sprint(s), a...)
 }
