@@ -1,3 +1,6 @@
+//llog is a simple *leveled* logging packages originally writen and used in Go
+//services at Sqwiggle (https://www.sqwiggle.com). The API is designed to be
+//conceptually similar to the standard library's log package
 package llog
 
 import (
@@ -17,6 +20,10 @@ const (
 	RESET   = "\033[0m"
 )
 
+//The available log levels are { levelNull:no logging, levelDebug:log out
+//everything, levelInfo: log out Info, Warn, Error, Succes and FATAL, LevelWarn:
+//log out Warn, Error, Success and FATAL and finally LevelError: log out Error,
+//Success and FATAL}
 const (
 	LevelNull = iota
 	LevelDebug
@@ -29,6 +36,8 @@ var (
 	level int = 1
 )
 
+//llog.Logger wraps/embeds a writer so that you can log where ever you like.
+//This package defaults to logging to os.Stdout
 type Logger struct {
 	io.Writer
 }
