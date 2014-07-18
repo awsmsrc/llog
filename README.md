@@ -3,13 +3,13 @@
 ## Installation
 
 ```
-go get github.com/lukeroberts1990/llog
+go get github.com/awsmsrc/llog
 ```
 
 ## About
 Brutally simple leveled logging package with color support
 
-docs can be found @ http://godoc.org/github.com/lukeroberts1990/llog
+docs can be found @ http://godoc.org/github.com/awsmsrc/llog
 
 ## TODO
 * color options
